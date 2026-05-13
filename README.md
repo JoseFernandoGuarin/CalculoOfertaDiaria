@@ -2,6 +2,8 @@
 
 # Cálculo de la Oferta de Forraje por Vaca por Día
 
+https://josefernandoguarin.github.io/CalculoOfertaDiaria/
+
 ## Lógica del cálculo
 
 El principio central es: **¿cuántos metros cuadrados de pradera tiene disponibles cada vaca cada día?** Una vez obtenido ese valor, basta multiplicarlo por el aforo para obtener la oferta en kilogramos de forraje fresco.
