@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oferta de Forraje — Finca Lechera</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1a0e;
+    --bg2: #162415;
+    --bg3: #1e3020;
+    --panel: #1a2b19;
+    --border: #2e4a2c;
+    --green: #4eca6b;
+    --green2: #2fa84a;
+    --green-dim: #1e6b34;
+    --amber: #e8b84b;
+    --amber-dim: #7a5e1a;
+    --cream: #f0ead8;
+    --muted: #7a9478;
+    --text: #d4e8d0;
+    --radius: 4px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(46,120,44,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 90%, rgba(30,80,28,0.10) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* Header */
+  header {
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 32px;
+  }
+
+  .label-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .label-tag::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 1px;
+    background: var(--green);
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  h1 span { color: var(--green); }
+
+  .subtitle {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 520px;
+    line-height: 1.6;
+  }
+
+  /* Layout */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 600px) {
+    .grid, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* Input cards */
+  .section-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 28px 0 12px;
+  }
+
+  .field {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    transition: border-color 0.2s;
+    position: relative;
+  }
+  .field:focus-within {
+    border-color: var(--green2);
+    background: var(--bg3);
+  }
+
+  .field label {
+    display: block;
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .field .unit {
+    position: absolute;
+    right: 18px;
+    bottom: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--green-dim);
+    pointer-events: none;
+  }
+
+  .field input[type="number"],
+  .field input[type="range"] {
+    width: 100%;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--cream);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    padding-right: 50px;
+    -moz-appearance: textfield;
+  }
+  .field input::-webkit-outer-spin-button,
+  .field input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  .field input[type="range"] {
+    -webkit-appearance: none;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    padding: 0;
+    margin-top: 8px;
+    cursor: pointer;
+    font-size: unset;
+  }
+  .field input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    background: var(--green);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .field input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.25); }
+  .range-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+
+  /* Calculate button */
+  .btn-calc {
+    width: 100%;
+    margin-top: 24px;
+    padding: 18px;
+    background: var(--green2);
+    color: #0a140a;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-calc:hover { background: var(--green); transform: translateY(-1px); }
+  .btn-calc:active { transform: translateY(0); }
+
+  /* Results */
+  #results {
+    margin-top: 40px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+  }
+  #results.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  .results-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .results-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cream);
+  }
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: var(--green-dim);
+    color: var(--green);
+    text-transform: uppercase;
+  }
+
+  /* Steps */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 24px;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    animation: stepIn 0.3s ease both;
+  }
+
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .step-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--green-dim);
+    text-align: center;
+  }
+  .step-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .step-desc strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 2px;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  .step-val {
+    text-align: right;
+  }
+  .step-val .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--cream);
+    white-space: nowrap;
+  }
+  .step-val .un {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    display: block;
+    text-align: right;
+    margin-top: 1px;
+  }
+
+  /* Final cards */
+  .final-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  @media (max-width: 500px) { .final-cards { grid-template-columns: 1fr; } }
+
+  .final-card {
+    border-radius: var(--radius);
+    padding: 24px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-card.potencial {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+  }
+  .final-card.real {
+    background: linear-gradient(135deg, #1a3d20 0%, #0f2a14 100%);
+    border: 1px solid var(--green2);
+  }
+  .final-card::after {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(78,202,107,0.08), transparent 70%);
+  }
+
+  .final-card .fc-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .final-card.real .fc-label { color: var(--green2); }
+
+  .final-card .fc-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 1;
+  }
+  .final-card.real .fc-val { color: var(--green); }
+
+  .final-card .fc-unit {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .final-card .fc-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 10px;
+    line-height: 1.5;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+
+  /* Formula box */
+  .formula-box {
+    margin-top: 24px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--amber);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .formula-box .f-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .formula-box .f-eq {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--cream);
+    line-height: 2;
+  }
+  .formula-box .f-eq span { color: var(--amber); }
+
+  /* Alert */
+  .alert {
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    display: none;
+  }
+  .alert.warn {
+    background: rgba(232,184,75,0.08);
+    border: 1px solid var(--amber-dim);
+    color: var(--amber);
+    display: block;
+  }
+
+  footer {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--green-dim);
+    font-family: 'IBM Plex Mono', monospace;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="label-tag">Producción Bovina · Pastoreo Rotativo</div>
+    <h1>Oferta de <span>Forraje</span><br>por Vaca/Día</h1>
+    <p class="subtitle">Calcula la disponibilidad de pasto fresco disponible por animal en un sistema de pastoreo rotativo, a partir del área, la rotación y el aforo de pradera.</p>
+  </header>
+
+  <!-- INPUTS -->
+  <p class="section-title">▸ Variables del sistema</p>
+  <div class="grid">
+    <div class="field">
+      <label>Área total en pastoreo</label>
+      <input type="number" id="area" value="64" min="1" step="0.5">
+      <span class="unit">ha</span>
+    </div>
+    <div class="field">
+      <label>Período de rotación</label>
+      <input type="number" id="rotacion" value="42" min="1" step="1">
+      <span class="unit">días</span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="field">
+      <label>Número de vacas</label>
+      <input type="number" id="vacas" value="120" min="1" step="1">
+      <span class="unit">animales</span>
+    </div>
+    <div class="field">
+      <label>Aforo de pradera</label>
+      <input type="number" id="aforo" value="2.5" min="0.1" step="0.1">
+      <span class="unit">kg FV/m²</span>
+    </div>
+  </div>
+
+  <p class="section-title">▸ Eficiencia de cosecha</p>
+  <div class="field">
+    <label>Porcentaje de utilización del forraje ofrecido</label>
+    <div class="range-val" id="efic-val">75 %</div>
+    <input type="range" id="eficiencia" min="40" max="95" value="75" step="1"
+      oninput="document.getElementById('efic-val').textContent = this.value + ' %'">
+  </div>
+  <p style="font-size:11px; color:var(--muted); margin-top:8px; font-family:'IBM Plex Mono',monospace;">
+    Pérdidas típicas por pisoteo, rechazo y residuo post-pastoreo: 60–80 % en sistemas rotativos
+  </p>
+
+  <button class="btn-calc" onclick="calcular()">◆ Calcular oferta</button>
+
+  <!-- RESULTS -->
+  <div id="results">
+
+    <div class="results-header" style="margin-top:40px">
+      <h2>Resultados</h2>
+      <span class="badge">Paso a paso</span>
+    </div>
+
+    <div class="steps" id="steps-container"></div>
+
+    <div class="final-cards">
+      <div class="final-card potencial">
+        <div class="fc-label">Oferta potencial</div>
+        <div class="fc-val" id="r-potencial">—</div>
+        <div class="fc-unit">kg FV / vaca / día</div>
+        <div class="fc-note">Sin descontar pérdidas de cosecha. Valor teórico máximo del sistema.</div>
+      </div>
+      <div class="final-card real">
+        <div class="fc-label">Oferta real estimada</div>
+        <div class="fc-val" id="r-real">—</div>
+        <div class="fc-unit">kg FV / vaca / día</div>
+        <div class="fc-note">Aplicando la eficiencia de cosecha definida.</div>
+      </div>
+    </div>
+
+    <div class="formula-box" id="formula-box"></div>
+    <div class="alert" id="alert-box"></div>
+
+  </div>
+
+  <footer>
+    <span>Grupo Leche UdeA · Producción Agropecuaria</span>
+    <span>Cálculo basado en pastoreo rotativo</span>
+  </footer>
+</div>
+
+<script>
+function fmt(n, dec=2) {
+  return Number(n.toFixed(dec)).toLocaleString('es-CO');
+}
+
+function calcular() {
+  const area     = parseFloat(document.getElementById('area').value);
+  const rotacion = parseFloat(document.getElementById('rotacion').value);
+  const vacas    = parseFloat(document.getElementById('vacas').value);
+  const aforo    = parseFloat(document.getElementById('aforo').value);
+  const efic     = parseFloat(document.getElementById('eficiencia').value) / 100;
+
+  // Validación
+  if ([area, rotacion, vacas, aforo].some(v => isNaN(v) || v <= 0)) {
+    document.getElementById('alert-box').className = 'alert warn';
+    document.getElementById('alert-box').textContent = '⚠ Por favor ingresa valores válidos y mayores que cero en todos los campos.';
+    return;
+  }
+  document.getElementById('alert-box').className = 'alert';
+
+  // Cálculos
+  const rotYear   = 365 / rotacion;                     // rot/año
+  const areaYear  = area * rotYear;                     // ha/año
+  const areaM2    = areaYear * 10000;                   // m²/año
+  const areaDay   = areaM2 / 365;                       // m²/día
+  const m2VacaDia = areaDay / vacas;                    // m²/vaca/día
+  const potencial = m2VacaDia * aforo;                  // kg FV/vaca/día potencial
+  const real      = potencial * efic;                   // kg FV/vaca/día real
+
+  // Pasos
+  const steps = [
+    {
+      n: '01',
+      titulo: 'Rotaciones por año',
+      desc: '365 días ÷ período de rotación',
+      val: fmt(rotYear, 2),
+      unit: 'rot / año'
+    },
+    {
+      n: '02',
+      titulo: 'Área total ofrecida por año',
+      desc: `${fmt(area,1)} ha × ${fmt(rotYear,2)} rot/año`,
+      val: fmt(areaYear, 1),
+      unit: 'ha / año'
+    },
+    {
+      n: '03',
+      titulo: 'Conversión a metros cuadrados',
+      desc: `${fmt(areaYear,1)} ha × 10.000 m²/ha`,
+      val: fmt(areaM2, 0),
+      unit: 'm² / año'
+    },
+    {
+      n: '04',
+      titulo: 'Área disponible por día',
+      desc: `${fmt(areaM2,0)} m² ÷ 365 días`,
+      val: fmt(areaDay, 0),
+      unit: 'm² / día'
+    },
+    {
+      n: '05',
+      titulo: 'Área por vaca por día',
+      desc: `${fmt(areaDay,0)} m²/día ÷ ${fmt(vacas,0)} vacas`,
+      val: fmt(m2VacaDia, 1),
+      unit: 'm² / vaca / día'
+    },
+    {
+      n: '06',
+      titulo: 'Oferta potencial de forraje',
+      desc: `${fmt(m2VacaDia,1)} m²/vaca/día × ${aforo} kg FV/m²`,
+      val: fmt(potencial, 1),
+      unit: 'kg FV / vaca / día'
+    },
+  ];
+
+  const container = document.getElementById('steps-container');
+  container.innerHTML = '';
+  steps.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'step';
+    div.style.animationDelay = (i * 0.06) + 's';
+    div.innerHTML = `
+      <span class="step-num">${s.n}</span>
+      <div class="step-desc"><strong>${s.titulo}</strong>${s.desc}</div>
+      <div class="step-val"><span class="num">${s.val}</span><span class="un">${s.unit}</span></div>
+    `;
+    container.appendChild(div);
+  });
+
+  document.getElementById('r-potencial').textContent = fmt(potencial, 1);
+  document.getElementById('r-real').textContent = fmt(real, 1);
+
+  // Fórmula simplificada
+  document.getElementById('formula-box').innerHTML = `
+    <div class="f-title">◆ Fórmula simplificada</div>
+    <div class="f-eq">
+      Oferta = <span>(ha × 10.000)</span> ÷ <span>(d<sub>rot</sub> × N°vacas)</span> × <span>Aforo</span><br>
+      Oferta = <span>(${fmt(area,1)} × 10.000)</span> ÷ <span>(${fmt(rotacion,0)} × ${fmt(vacas,0)})</span> × <span>${aforo}</span><br>
+      Oferta = <span>${fmt(potencial,1)} kg FV / vaca / día</span>
+    </div>
+  `;
+
+  // Alertas agronómicas
+  let warn = '';
+  if (potencial < 30) warn = '⚠ La oferta potencial es muy baja. Considera aumentar el área o mejorar el aforo.';
+  else if (potencial > 600) warn = '⚠ La oferta potencial es muy alta. Verifica los datos ingresados.';
+  else if (m2VacaDia < 20) warn = '⚠ Área por vaca muy reducida: puede haber sobrepastoreo.';
+  else if (rotacion < 21) warn = '⚠ Período de rotación corto. En trópico se recomiendan al menos 28–42 días.';
+
+  if (warn) {
+    document.getElementById('alert-box').className = 'alert warn';
+    document.getElementById('alert-box').textContent = warn;
+  }
+
+  const res = document.getElementById('results');
+  res.classList.add('visible');
+  setTimeout(() => res.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+// Calcular al cargar con valores por defecto
+window.onload = calcular;
+</script>
+</body>
+</html>
